@@ -9,6 +9,7 @@ import com.developer.anishakd4.wmallassignment.model.CustomData
 import com.developer.anishakd4.wmallassignment.networking.ResturantApi
 import kotlinx.coroutines.*
 
+enum class ApiStatus { LOADING, ERROR, DONE }
 
 class OverviewFragementViewModel : ViewModel() {
 
@@ -23,6 +24,10 @@ class OverviewFragementViewModel : ViewModel() {
     val listitems: LiveData<ArrayList<CustomData>>
         get() = _listItems
 
+    private val _currentStatus = MutableLiveData<ApiStatus>()
+    val currentStatus: LiveData<ApiStatus>
+        get() = _currentStatus
+
     init {
         getProperties()
     }
@@ -31,7 +36,9 @@ class OverviewFragementViewModel : ViewModel() {
         coroutineScope.launch {
             val getPropertiesDeferred = ResturantApi.getDataInterface.getCategories()
             try {
+                _currentStatus.value = ApiStatus.LOADING
                 val listResult = getPropertiesDeferred.await()
+                _currentStatus.value = ApiStatus.DONE
                 for (category in listResult.categories) {
                     categories.add(category.categories)
                 }
@@ -41,6 +48,7 @@ class OverviewFragementViewModel : ViewModel() {
                 }
             } catch (t: Throwable) {
                 Log.i("anisham", "anisham = fail ${t.localizedMessage}")
+                _currentStatus.value = ApiStatus.ERROR
             }
 
         }

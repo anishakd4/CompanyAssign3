@@ -1,6 +1,7 @@
 package com.developer.anishakd4.wmallassignment
 
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
@@ -10,6 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.developer.anishakd4.wmallassignment.adapter.ChildRecyclerViewAdapter
 import com.developer.anishakd4.wmallassignment.adapter.GridRecyclerviewAdapter
 import com.developer.anishakd4.wmallassignment.adapter.MainRecyclerViewAdapter
+import com.developer.anishakd4.wmallassignment.fragments.ApiStatus
 import com.developer.anishakd4.wmallassignment.model.CustomData
 import com.developer.anishakd4.wmallassignment.model.ResturantModel
 
@@ -42,5 +44,22 @@ fun bindImage(imgView: ImageView, imgUrl: String?){
             .apply(RequestOptions().placeholder(R.drawable.loading_animation).error(R.drawable.ic_broken_image))
             .into(imgView)
 
+    }
+}
+
+@BindingAdapter("marsApistatus")
+fun bindStatus(imgView: ImageView, status: ApiStatus?){
+    when(status){
+        ApiStatus.LOADING -> {
+            imgView.visibility = View.VISIBLE
+            imgView.setImageResource(R.drawable.loading_animation)
+        }
+        ApiStatus.ERROR -> {
+            imgView.visibility = View.VISIBLE
+            imgView.setImageResource(R.drawable.ic_broken_image)
+        }
+        ApiStatus.DONE -> {
+            imgView.visibility = View.GONE
+        }
     }
 }
