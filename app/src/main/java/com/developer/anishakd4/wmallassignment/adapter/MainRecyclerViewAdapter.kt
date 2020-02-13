@@ -1,5 +1,6 @@
 package com.developer.anishakd4.wmallassignment.adapter
 
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.developer.anishakd4.wmallassignment.databinding.GridListBinding
 import com.developer.anishakd4.wmallassignment.databinding.HorizontalCardBinding
 import com.developer.anishakd4.wmallassignment.databinding.HorizontalListBinding
+import com.developer.anishakd4.wmallassignment.databinding.ViewpagerListBinding
 import com.developer.anishakd4.wmallassignment.model.CustomData
 import com.developer.anishakd4.wmallassignment.model.ResturantModel
 
@@ -17,7 +19,7 @@ private const val ITEM_TYPE_HLIST = 0
 private const val ITEM_TYPE_GRID = 1
 private const val ITEM_TYPE_HCARD = 2
 
-class MainRecyclerViewAdapter : ListAdapter<CustomData, RecyclerView.ViewHolder>(DiffCallBack) {
+class MainRecyclerViewAdapter(val metrics: DisplayMetrics?) : ListAdapter<CustomData, RecyclerView.ViewHolder>(DiffCallBack) {
 
     companion object DiffCallBack : DiffUtil.ItemCallback<CustomData>() {
         override fun areItemsTheSame(oldItem: CustomData, newItem: CustomData): Boolean {
@@ -61,16 +63,17 @@ class MainRecyclerViewAdapter : ListAdapter<CustomData, RecyclerView.ViewHolder>
         }
     }
 
-    class HorizontalCardViewHolder(binding: HorizontalCardBinding) : RecyclerView.ViewHolder(binding.root) {
+    class HorizontalCardViewHolder(val binding: ViewpagerListBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(customData: CustomData) {
-
+        fun bind(customData: CustomData, metrics: DisplayMetrics?) {
+            binding.item = customData
+            binding.viewPager2.adapter = ViewPagerAdapter(customData.resturantModel, metrics)
         }
 
         companion object {
             fun from(parent: ViewGroup): HorizontalCardViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding: HorizontalCardBinding = HorizontalCardBinding.inflate(layoutInflater, parent, false)
+                val binding: ViewpagerListBinding = ViewpagerListBinding.inflate(layoutInflater, parent, false)
                 return HorizontalCardViewHolder(binding)
             }
         }
@@ -89,7 +92,7 @@ class MainRecyclerViewAdapter : ListAdapter<CustomData, RecyclerView.ViewHolder>
         return when (viewType) {
             ITEM_TYPE_HLIST -> HorizontalListViewHolder.from(parent)
             ITEM_TYPE_GRID -> GridListViewHolder.from(parent)
-            ITEM_TYPE_HCARD -> HorizontalListViewHolder.from(parent)
+            ITEM_TYPE_HCARD -> HorizontalCardViewHolder.from(parent)
             else -> HorizontalListViewHolder.from(parent)
         }
     }
@@ -105,7 +108,7 @@ class MainRecyclerViewAdapter : ListAdapter<CustomData, RecyclerView.ViewHolder>
                 holder.bind(item)
             }
             is HorizontalCardViewHolder -> {
-                holder.bind(item)
+                holder.bind(item, metrics)
             }
         }
     }

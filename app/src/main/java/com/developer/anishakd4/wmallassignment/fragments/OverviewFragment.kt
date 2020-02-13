@@ -1,6 +1,7 @@
 package com.developer.anishakd4.wmallassignment.fragments
 
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,8 +24,19 @@ class OverviewFragment : Fragment(){
         binding.setLifecycleOwner(this)
         binding.viewModel = viewModel
 
-        binding.mainList.adapter = MainRecyclerViewAdapter()
+        binding.mainList.adapter = MainRecyclerViewAdapter(getDisplayMetrics())
 
         return binding.root
+    }
+
+    private fun getDisplayMetrics(): DisplayMetrics? {
+        if(activity != null){
+            val display = activity!!.windowManager.defaultDisplay
+            val metrics = DisplayMetrics()
+            display.getMetrics(metrics)
+
+            return metrics
+        }
+        return null
     }
 }

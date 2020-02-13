@@ -2,6 +2,7 @@ package com.developer.anishakd4.wmallassignment
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.DisplayMetrics
 import com.developer.anishakd4.wmallassignment.fragments.OverviewFragment
 
 class MainActivity : AppCompatActivity() {
@@ -12,4 +13,5 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction().add(R.id.fragment, OverviewFragment()).commit()
     }
+
 }
