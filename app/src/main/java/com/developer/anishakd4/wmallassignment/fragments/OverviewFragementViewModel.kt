@@ -16,9 +16,9 @@ class OverviewFragementViewModel : ViewModel() {
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    val num = arrayOf<String>("H_LIST", "GRID", "H_CARD")
+    private val num = arrayOf<String>("H_LIST", "GRID", "H_CARD")
 
-    var categories = ArrayList<CategoryModel>()
+    private var categories = ArrayList<CategoryModel>()
 
     private var _listItems = MutableLiveData<ArrayList<CustomData>>()
     val listitems: LiveData<ArrayList<CustomData>>
